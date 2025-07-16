@@ -675,7 +675,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
             <img 
               src="https://miro.medium.com/v2/resize:fit:1400/1*KSH-ELYLBI0dzE1Wt7mRKg.png" 
               alt="Logo BNCC Learning & Training" 
-              className="h-12"
+              className="h-25 w-40"
             />
             <div className="hidden md:flex items-center space-x-8">
               {navLinks.map(link => <a key={link.href} href={link.href} onClick={(e) => handleNavClick(e, link.href)} className="text-gray-300 hover:text-cyan-400 transition-colors cursor-pointer">{link.name}</a>)}
