@@ -6,6 +6,8 @@ import axios from 'axios';
 import * as Tone from 'tone';
 import { Helmet } from 'react-helmet-async';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 // --- Animation Variants ---
 const fadeIn: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -535,7 +537,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
   useEffect(() => {
     const fetchStatus = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/settings/status');
+            const response = await axios.get(`${API_URL}/api/settings/status`);
             setIsRegistrationOpen(response.data.isRegistrationOpen);
         } catch (error) {
             console.error("Failed to fetch registration status", error);
@@ -556,7 +558,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
     setError(null);
 
     try {
-      const response = await axios.post('http://localhost:8080/api/register', formData);
+      const response = await axios.post(`${API_URL}/api/register`, formData);
       if (response.status === 201) {
         onRegister(response.data.data.fullName);
       }

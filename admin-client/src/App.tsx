@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { LogOut, Shield, Mail, AlertCircle, Edit, Trash2, Download, Search, ChevronsUpDown, ArrowUp, ArrowDown, Power, PowerOff } from 'lucide-react';
 import axios from 'axios';
-
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 // --- Interfaces ---
 interface FormInputProps {
   icon: React.ReactNode;
@@ -60,7 +60,7 @@ const EditModal = ({ registration, onClose, onSave, token }: { registration: IRe
         setIsLoading(true);
         setError('');
         try {
-            const response = await axios.put(`http://localhost:8080/api/admin/registrations/${formData._id}`, formData, {
+            const response = await axios.put(`${API_URL}/api/admin/registrations/${formData._id}`, formData, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             onSave(response.data.data);
@@ -113,7 +113,7 @@ const AdminLoginPage = ({ onLoginSuccess }: { onLoginSuccess: (token: string) =>
         setIsLoading(true);
         setError('');
         try {
-            const response = await axios.post('http://localhost:8080/api/admin/login', { email, password });
+            const response = await axios.post(`${API_URL}/api/admin/login`, { email, password });
             onLoginSuccess(response.data.token);
         } catch (err) {
             if (axios.isAxiosError(err) && err.response) {
@@ -160,7 +160,7 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
     const fetchRegistrations = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:8080/api/admin/registrations', {
+            const response = await axios.get(`${API_URL}/api/admin/registrations`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setRegistrations(response.data);
@@ -174,7 +174,7 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
 
     const fetchRegistrationStatus = useCallback(async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/settings/status');
+            const response = await axios.get(`${API_URL}/api/settings/status`);
             setIsRegistrationOpen(response.data.isRegistrationOpen);
         } catch (err) {
             console.error("Could not fetch registration status", err);
@@ -193,7 +193,7 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
     const handleDelete = async (id: string) => {
         if (window.confirm('Are you sure you want to delete this registration?')) {
             try {
-                await axios.delete(`http://localhost:8080/api/admin/registrations/${id}`, {
+                await axios.delete(`${API_URL}/api/admin/registrations/${id}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setRegistrations(registrations.filter(reg => reg._id !== id));
@@ -207,7 +207,7 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
     const toggleRegistrationStatus = async () => {
         setIsStatusLoading(true);
         try {
-            const response = await axios.post('http://localhost:8080/api/admin/settings/toggle', {}, {
+            const response = await axios.post(`${API_URL}/api/admin/settings/toggle`, {}, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setIsRegistrationOpen(response.data.isRegistrationOpen);
