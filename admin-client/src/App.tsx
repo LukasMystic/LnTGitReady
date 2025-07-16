@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { LogOut, Shield, Mail, AlertCircle, Edit, Trash2, Download, Search, ChevronsUpDown, ArrowUp, ArrowDown, Power, PowerOff } from 'lucide-react';
 import axios from 'axios';
+
+// --- API URL ---
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 // --- Interfaces ---
 interface FormInputProps {
   icon: React.ReactNode;
@@ -211,7 +214,7 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setIsRegistrationOpen(response.data.isRegistrationOpen);
-        } catch (err) {
+        } catch (_err) {
             alert('Failed to update status.');
         } finally {
             setIsStatusLoading(false);
