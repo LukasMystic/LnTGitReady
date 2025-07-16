@@ -32,8 +32,27 @@
     
     const ADMIN_ACCESS_TOKEN = "secret-admin-token-12345";
     
-    // --- Middleware ---
-    app.use(cors()); // Menggunakan konfigurasi default yang lebih permisif
+    // --- CORS Configuration ---
+    const allowedOrigins = [
+        'https://lnt-git-ready-user.vercel.app', 
+        'https://ln-t-git-ready.vercel.app',
+        'http://localhost:5173',
+        'http://localhost:5174'
+    ];
+    
+    const corsOptions: cors.CorsOptions = {
+      origin: (origin, callback) => {
+        // allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+          const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+          return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+      }
+    };
+    
+    app.use(cors(corsOptions));
     app.use(express.json());
     
     // --- MongoDB Connection ---

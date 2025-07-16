@@ -604,7 +604,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
           .
         </span>
       )},
-      { question: "Apakah makan siang disediakan?", answer: "Ya, kami menyediakan makan siang untuk seluruh peserta. Peserta hanya akan dapat makan siang tidak snack." }
+      { question: "Apakah makan siang disediakan?", answer: "Ya, kami menyediakan makan siang untuk seluruh peserta." }
   ];
 
   const navLinks = [
@@ -763,7 +763,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
               <motion.section id="learn" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={staggerContainer}>
                 <h2 className="text-4xl font-bold mb-8 border-l-4 border-cyan-400 pl-4">Apa yang Akan Anda Pelajari?</h2>
                 <ul className="space-y-5">
-                  {['Memahami konsep Version Control System (VCS)', 'Inisialisasi repository dan melakukan commit', 'Branching, merging, dan mengatasi konflik', 'Berkolaborasi dalam tim menggunakan GitHub Flow', 'Tips & trik yang digunakan developer profesional'].map((item) => (
+                  {['Memahami konsep Version Control System (VCS)', 'Inisialisasi repository dan melakukan commit', 'Branching, merging, dan mengatasi konflik', 'Tips & trik yang digunakan developer profesional'].map((item) => (
                     <motion.li key={item} variants={fadeIn} className="flex items-start text-xl">
                       <ArrowRight className="h-8 w-8 text-cyan-400 mr-4 mt-1 flex-shrink-0" />
                       <span className="text-gray-300">{item}</span>
