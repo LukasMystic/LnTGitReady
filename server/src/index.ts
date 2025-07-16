@@ -32,29 +32,11 @@
     
     const ADMIN_ACCESS_TOKEN = "secret-admin-token-12345";
     
-    // --- CORS Configuration ---
-    // IMPORTANT: Replace these with your actual frontend URLs from Vercel
-    const allowedOrigins = [
-        'https://ln-t-git-ready.vercel.app/', 
-        'https://lnt-git-ready-user.vercel.app/',
-        'http://localhost:5173', // For local client dev
-        'http://localhost:5174'  // For local admin-client dev (check your port)
-    ];
-    
-    const corsOptions = {
-      origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-          callback(null, true);
-        } else {
-          callback(new Error('Not allowed by CORS'));
-        }
-      },
-      credentials: true,
-    };
-    
-    app.use(cors(corsOptions));
+    // --- Middleware ---
+    app.use(cors()); // Menggunakan konfigurasi default yang lebih permisif
     app.use(express.json());
     
+    // --- MongoDB Connection ---
     const mongoUri = process.env.MONGO_URI;
     
     if (!mongoUri) {
@@ -69,6 +51,7 @@
             process.exit(1);
         });
     
+    // --- Middleware for Admin Authentication ---
     const requireAdminAuth = (req: Request, res: Response, next: NextFunction) => {
         const token = req.headers['authorization'];
         if (token === `Bearer ${ADMIN_ACCESS_TOKEN}`) {
@@ -78,7 +61,9 @@
         }
     };
     
-    // --- Public Routes ---
+    
+    // --- API Routes ---
+    
     app.get('/', (req: Request, res: Response) => {
       res.send('Express + TypeScript Server is running! 🚀');
     });
@@ -137,6 +122,7 @@
     
     
     // --- Admin Routes ---
+    
     app.post('/api/admin/login', (req: Request, res: Response) => {
         const { email, password } = req.body;
         if (!email || !password) {
