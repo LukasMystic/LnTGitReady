@@ -6,7 +6,9 @@ import axios from 'axios';
 import * as Tone from 'tone';
 import { Helmet } from 'react-helmet-async';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const API_URL = rawUrl.replace(/\/$/, '');
+
 
 // --- Animation Variants ---
 const fadeIn: Variants = {

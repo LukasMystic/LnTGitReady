@@ -2,7 +2,9 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { LogOut, Shield, Mail, AlertCircle, Edit, Trash2, Download, Search, ChevronsUpDown, ArrowUp, ArrowDown, Power, PowerOff } from 'lucide-react';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const API_URL = rawUrl.replace(/\/$/, ''); 
+
 
 // --- Interfaces ---
 interface FormInputProps {
