@@ -32,7 +32,15 @@
     
     // --- Middleware ---
     // This allows all origins. It's the most reliable way to fix CORS issues on Vercel.
-    app.use(cors()); 
+    app.use(cors({
+        origin: [
+            'https://lnt-git-ready.vercel.app',     // client
+            'https://ln-t-git-ready.vercel.app'     // admin
+        ],
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization']
+        }));
+
     app.use(express.json());
     
     // --- MongoDB Connection ---
