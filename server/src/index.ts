@@ -20,7 +20,7 @@
         origin: [
             'https://lnt-git-ready.vercel.app',     // client
             'https://ln-t-git-ready.vercel.app',// admin
-            'https://lnt-git-ready-user.vercel.app/' // server
+            'https://lnt-git-ready-user.vercel.app' // server
         ],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization']
