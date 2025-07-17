@@ -10,32 +10,17 @@
     const app: Express = express();
     const port = process.env.PORT || 8080;
     
-    const adminCredentials = {
-        'stanley.teguh@binus.ac.id': 'DTgKPUeoNX4kACm',
-        'nico.hariyanto@binus.ac.id': 'qasMaAqyU0lRPP6',
-        'sandy.alamsyah@binus.ac.id': 'SU4WIgp3Bl3NOlk',
-        'arian.febrian@binus.ac.id': 'SelmHyv4u2YsSsy',
-        'brhanselino.edipurtta@binus.ac.id': 'h6gWwT6IBqADL35',
-        'kevin.handoyo001@binus.ac.id': 'ENmFIyJA2krgiVy',
-        'reynard.wijaya005@binus.ac.id': 'ksaHmslX3VD497G',
-        'alexander.budianto@binus.ac.id': 'glsT8TW9IGMqjWz',
-        'aulia.nurista@binus.ac.id': '6BRsjBeV2jzoqTC',
-        'ayatullah.qurne@binus.ac.id': '9Gthws9Oup2B4yO',
-        'darren.suntara@binus.ac.id': 'darren123',
-        'kezia.haryono@binus.ac.id': 'AnRyIjJvDOP4WDo',
-        'gregorio.sucianggroho@binus.ac.id': '4fXFXpwIYbBNQlZ',
-        'muhammad.paruk@binus.ac.id': 'TIY9cEaT1fuvqUu',
-        'sheren.paramitha@binus.ac.id': 'dJKF7UgndJZjH8P',
-    };
+    const adminCredentials = JSON.parse(process.env.ADMIN_CREDENTIALS || '{}');
+
     
     const ADMIN_ACCESS_TOKEN = "secret-admin-token-12345";
     
     // --- Middleware ---
-    // This allows all origins. It's the most reliable way to fix CORS issues on Vercel.
     app.use(cors({
         origin: [
             'https://lnt-git-ready.vercel.app',     // client
-            'https://ln-t-git-ready.vercel.app'     // admin
+            'https://ln-t-git-ready.vercel.app',// admin
+            'https://lnt-git-ready-user.vercel.app/' // server
         ],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization']
