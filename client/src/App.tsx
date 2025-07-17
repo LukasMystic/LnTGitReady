@@ -463,7 +463,7 @@ const DinoGame = () => {
 
     return (
         <div className="bg-gray-800/50 p-8 rounded-2xl text-center">
-            <h2 className="text-3xl font-bold mb-4">Dino Jump Challenge</h2>
+            <h2 className="text-3xl font-bold mb-4">Cube Jump Challenge</h2>
             <div
                 ref={gameAreaRef}
                 className={`relative w-full h-80 rounded-lg overflow-hidden cursor-pointer border-2 border-gray-700 transition-colors duration-1000 ${sceneryClass}`}
@@ -576,6 +576,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
   };
 
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const { scrollY } = useScroll();
 
@@ -615,7 +616,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
     { name: "Materi", href: "#learn" },
     { name: "FAQ", href: "#faq" },
     { name: "Simulator", href: "#game" },
-    { name: "Dino Game", href: "#dino-game" }
+    { name: "Cube Game", href: "#dino-game" }
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -627,6 +628,34 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
     });
     setIsNavOpen(false);
   };
+  useEffect(() => {
+  const sections = navLinks.map(link => document.getElementById(link.href.replace('#', '')));
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    },
+    {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.6,
+    }
+  );
+
+  sections.forEach(section => {
+    if (section) observer.observe(section);
+  });
+
+  return () => {
+    sections.forEach(section => {
+      if (section) observer.unobserve(section);
+    });
+  };
+}, []);
 
   return (
     <>
@@ -680,8 +709,23 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
               className="h-25 w-40"
             />
             <div className="hidden md:flex items-center space-x-8">
-              {navLinks.map(link => <a key={link.href} href={link.href} onClick={(e) => handleNavClick(e, link.href)} className="text-gray-300 hover:text-cyan-400 transition-colors cursor-pointer">{link.name}</a>)}
+              {navLinks.map(link => {
+                const isActive = activeSection === link.href.replace('#', '');
+                return (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className={`text-gray-300 hover:text-cyan-400 transition-all duration-300 cursor-pointer ${
+                      isActive ? 'underline underline-offset-8 decoration-cyan-400 font-semibold' : ''
+                    }`}
+                  >
+                    {link.name}
+                  </a>
+                );
+              })}
             </div>
+
             <a href="#form-pendaftaran" onClick={(e) => handleNavClick(e, '#form-pendaftaran')} className="hidden md:inline-block bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 transform hover:scale-105 cursor-pointer">
               Daftar
             </a>
