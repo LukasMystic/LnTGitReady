@@ -331,8 +331,9 @@ const DinoGame = () => {
         obstacleInterval: 1800,
     };
 
-    const startGame = () => {
-        Tone.start();
+    const startGame = async () => {
+        await Tone.start(); 
+        await Tone.context.resume();
         playerRef.current = { y: gameSettings.groundY - gameSettings.playerSize, vy: 0 };
         obstaclesRef.current = [];
         scoreRef.current = 0;
@@ -351,7 +352,9 @@ const DinoGame = () => {
 
         if (isRunning && !gameOver && playerRef.current.y >= gameSettings.groundY - gameSettings.playerSize - 5) {
             playerRef.current.vy = gameSettings.jumpStrength;
-            sounds.current.jump?.triggerAttackRelease("C5", "8n", now + 0.01); // Delay to ensure time increases
+           Tone.Draw.schedule(() => {
+            sounds.current.jump?.triggerAttackRelease("C5", "8n");
+          }, "+0.01");
         }
     };
 
@@ -383,9 +386,11 @@ const DinoGame = () => {
 
         const currentScore = Math.floor(scoreRef.current / 10);
         if (currentScore > 0 && currentScore % 100 === 0) {
-            const now = Tone.now();
-            sounds.current.score?.triggerAttackRelease("E5", "16n", now + 0.01);
+            Tone.Draw.schedule(() => {
+                sounds.current.score?.triggerAttackRelease("E5", "16n");
+            }, "+0.01");
         }
+
 
         
         const newSceneryLevel = Math.floor(currentScore / 500);
@@ -445,13 +450,15 @@ const DinoGame = () => {
         obstaclesRef.current = newObstacles;
 
         if (isGameOver) {
-            const now = Tone.now();
-            sounds.current.gameOver?.triggerAttackRelease("C3", "0.5", now + 0.01);
+            Tone.Draw.schedule(() => {
+                sounds.current.gameOver?.triggerAttackRelease("C3", "0.5");
+            }, "+0.01");
 
             setIsRunning(false);
             setGameOver(true);
             return;
         }
+
 
         setForceRender(r => r + 1);
         requestRef.current = requestAnimationFrame(gameLoop);
