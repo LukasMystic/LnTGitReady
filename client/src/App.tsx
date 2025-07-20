@@ -342,13 +342,19 @@ const DinoGame = () => {
         setIsRunning(true);
         setSceneryLevel(0);
     };
+    const lastJumpTimeRef = useRef(0); 
 
     const jump = () => {
+        const now = Tone.now();
+        if (now - lastJumpTimeRef.current < 0.05) return;
+        lastJumpTimeRef.current = now;
+
         if (isRunning && !gameOver && playerRef.current.y >= gameSettings.groundY - gameSettings.playerSize - 5) {
             playerRef.current.vy = gameSettings.jumpStrength;
-            sounds.current.jump?.triggerAttackRelease("C5", "8n");
+            sounds.current.jump?.triggerAttackRelease("C5", "8n", now + 0.01); // Delay to ensure time increases
         }
     };
+
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -377,8 +383,10 @@ const DinoGame = () => {
 
         const currentScore = Math.floor(scoreRef.current / 10);
         if (currentScore > 0 && currentScore % 100 === 0) {
-            sounds.current.score?.triggerAttackRelease("E5", "16n");
+            const now = Tone.now();
+            sounds.current.score?.triggerAttackRelease("E5", "16n", now + 0.01);
         }
+
         
         const newSceneryLevel = Math.floor(currentScore / 500);
         if (newSceneryLevel > sceneryLevel) {
@@ -437,7 +445,9 @@ const DinoGame = () => {
         obstaclesRef.current = newObstacles;
 
         if (isGameOver) {
-            sounds.current.gameOver?.triggerAttackRelease("C3", "0.5");
+            const now = Tone.now();
+            sounds.current.gameOver?.triggerAttackRelease("C3", "0.5", now + 0.01);
+
             setIsRunning(false);
             setGameOver(true);
             return;
@@ -908,7 +918,8 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
               <div className="mb-6">
                   <h3 className="text-xl font-bold mb-4">Find out more about BNCC here:</h3>
                   <div className="flex justify-center space-x-6">
-                      <a href="https://bncc.net/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-cyan-400 transition-colors"><span className="sr-only">Website</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
+                      <a href="https://bncc.net/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-cyan-400 transition-colors"><span className="sr-only">Website</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72" /></svg>
+</a>
                       <a href="https://www.instagram.com/bnccmalang/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-cyan-400 transition-colors"><span className="sr-only">Instagram Malang</span><Instagram /></a>
                       <a href="https://www.instagram.com/bnccbinus/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-cyan-400 transition-colors"><span className="sr-only">Instagram Central</span><Instagram /></a>
                       <a href="https://www.facebook.com/bina.nusantara.computer.club" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-cyan-400 transition-colors"><span className="sr-only">Facebook</span><Facebook /></a>
