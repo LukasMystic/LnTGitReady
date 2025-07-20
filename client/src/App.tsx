@@ -302,6 +302,8 @@ const DinoGame = () => {
     const scoreRef = useRef(0);
     const gameSpeedRef = useRef(5);
     const timeSinceLastObstacleRef = useRef(0);
+    // FIX: Add a ref to track the last score milestone for which a sound was played.
+    const lastScoreSoundRef = useRef(0);
 
     const [sceneryLevel, setSceneryLevel] = useState(0);
     const [_, setForceRender] = useState(0);
@@ -339,6 +341,8 @@ const DinoGame = () => {
         scoreRef.current = 0;
         gameSpeedRef.current = gameSettings.initialSpeed;
         timeSinceLastObstacleRef.current = 0;
+        // FIX: Reset the score sound tracker on game start.
+        lastScoreSoundRef.current = 0;
         setGameOver(false);
         setIsRunning(true);
         setSceneryLevel(0);
@@ -385,10 +389,15 @@ const DinoGame = () => {
         scoreRef.current += 1;
 
         const currentScore = Math.floor(scoreRef.current / 10);
-        if (currentScore > 0 && currentScore % 100 === 0) {
+        
+        // FIX: Ensure the score sound is triggered only once per milestone.
+        // Check if the score is a multiple of 100 and is different from the last time we played the sound.
+        if (currentScore > 0 && currentScore % 100 === 0 && currentScore !== lastScoreSoundRef.current) {
             Tone.Draw.schedule(() => {
                 sounds.current.score?.triggerAttackRelease("E5", "16n");
             }, "+0.01");
+            // Update the ref to the current score so we don't trigger the sound again for this same score.
+            lastScoreSoundRef.current = currentScore;
         }
 
 
