@@ -303,13 +303,13 @@ const DinoGame = () => {
     const scoreRef = useRef(0);
     const gameSpeedRef = useRef(5);
     const timeSinceLastObstacleRef = useRef(0);
-    // FIX: Add a ref to track the last score milestone for which a sound was played.
     const lastScoreSoundRef = useRef(0);
 
     const [sceneryLevel, setSceneryLevel] = useState(0);
     const [_, setForceRender] = useState(0);
     const [gameOver, setGameOver] = useState(false);
     const [isRunning, setIsRunning] = useState(false);
+    const [obstacleScale, setObstacleScale] = useState(1);
 
     const sounds = useRef<{
         jump: Tone.Synth | null,
@@ -323,7 +323,13 @@ const DinoGame = () => {
         sounds.current.gameOver = new Tone.Synth({ oscillator: { type: 'sawtooth' }, envelope: { attack: 0.01, decay: 0.4, sustain: 0.1, release: 0.2 } }).toDestination();
     }, []);
 
-    const gameSettings = {
+    useEffect(() => {
+    if (window.innerWidth < 500) {
+        setObstacleScale(0.6); // scale down to 60% on mobile
+    }
+  }, []);
+
+    const [gameSettings, setGameSettings] = useState({
         gravity: 0.8,
         jumpStrength: -19,
         playerX: 50,
@@ -332,8 +338,22 @@ const DinoGame = () => {
         initialSpeed: 4,
         speedIncrease: 0.002,
         obstacleInterval: 1800,
-    };
-
+    });
+    useEffect(() => {
+      const width = window.innerWidth;
+      if (width < 500) {
+          setGameSettings({
+              gravity: 0.8,
+              jumpStrength: -14, 
+              playerX: 30,      
+              playerSize: 25,    
+              groundY: 250,      
+              initialSpeed: 3,  
+              speedIncrease: 0.002,
+              obstacleInterval: 1500, 
+          });
+      }
+  }, []);
     const startGame = async () => {
         await Tone.start(); 
         await Tone.context.resume();
@@ -342,7 +362,6 @@ const DinoGame = () => {
         scoreRef.current = 0;
         gameSpeedRef.current = gameSettings.initialSpeed;
         timeSinceLastObstacleRef.current = 0;
-        // FIX: Reset the score sound tracker on game start.
         lastScoreSoundRef.current = 0;
         setGameOver(false);
         setIsRunning(true);
@@ -390,14 +409,10 @@ const DinoGame = () => {
         scoreRef.current += 1;
 
         const currentScore = Math.floor(scoreRef.current / 10);
-        
-        // FIX: Ensure the score sound is triggered only once per milestone.
-        // Check if the score is a multiple of 100 and is different from the last time we played the sound.
         if (currentScore > 0 && currentScore % 100 === 0 && currentScore !== lastScoreSoundRef.current) {
             Tone.Draw.schedule(() => {
                 sounds.current.score?.triggerAttackRelease("E5", "16n");
             }, "+0.01");
-            // Update the ref to the current score so we don't trigger the sound again for this same score.
             lastScoreSoundRef.current = currentScore;
         }
 
@@ -410,27 +425,30 @@ const DinoGame = () => {
 
         timeSinceLastObstacleRef.current += 16;
         if (timeSinceLastObstacleRef.current > gameSettings.obstacleInterval) {
-            timeSinceLastObstacleRef.current = 0;
-            const gameWidth = gameAreaRef.current.clientWidth;
-            const isBird = Math.random() > 0.65;
-            
-            if (isBird) {
-                obstaclesRef.current.push({
-                    x: gameWidth,
-                    width: 45,
-                    height: 30,
-                    type: 'air',
-                    y: gameSettings.groundY - 140 + Math.random() * 80
-                });
-            } else {
-                 obstaclesRef.current.push({
-                    x: gameWidth,
-                    width: 20 + Math.random() * 30,
-                    height: 30 + Math.random() * 60,
-                    type: 'ground'
-                });
-            }
-        }
+          timeSinceLastObstacleRef.current = 0;
+          const gameWidth = gameAreaRef.current.clientWidth;
+          const isBird = Math.random() > 0.65;
+
+          if (isBird) {
+              obstaclesRef.current.push({
+                  x: gameWidth,
+                  width: 45 * obstacleScale,
+                  height: 30 * obstacleScale,
+                  type: 'air',
+                  y: gameSettings.groundY - 140 * obstacleScale + Math.random() * 80 * obstacleScale
+              });
+          } else {
+              const baseWidth = 20 + Math.random() * 30;
+              const baseHeight = 30 + Math.random() * 60;
+              obstaclesRef.current.push({
+                  x: gameWidth,
+                  width: baseWidth * obstacleScale,
+                  height: baseHeight * obstacleScale,
+                  type: 'ground'
+              });
+          }
+      }
+
 
         let isGameOver = false;
         const playerRect = {
@@ -781,8 +799,6 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
           </AnimatePresence>
         </header>
 
-        <main className="container mx-auto px-6 pt-24">
-          <section className="relative text-center h-[100vh] flex flex-col items-center justify-center overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
               <motion.video 
                   style={{ y }}
@@ -795,6 +811,10 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
               ></motion.video>
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-gray-900 via-gray-900/70 to-transparent"></div>
             </div>
+
+        <main className="container mx-auto px-6 pt-24">
+          <section className="relative text-center h-[100vh] flex flex-col items-center justify-center overflow-hidden">
+ 
             <motion.div className="relative z-10" initial="hidden" animate="visible" variants={staggerContainer}>
               <motion.h1 variants={fadeIn} className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">GitReady</span> with LnT
