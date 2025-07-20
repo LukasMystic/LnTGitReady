@@ -5,7 +5,8 @@ import { type Variants } from 'framer-motion';
 import axios from 'axios';
 import * as Tone from 'tone';
 import { Helmet } from 'react-helmet-async';
-
+import NotFoundPage from './NotFoundPage';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const API_URL = rawUrl.replace(/\/$/, '');
 
@@ -328,7 +329,7 @@ const DinoGame = () => {
         playerX: 50,
         playerSize: 40,
         groundY: 280,
-        initialSpeed: 6,
+        initialSpeed: 4,
         speedIncrease: 0.002,
         obstacleInterval: 1800,
     };
@@ -613,7 +614,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
   const y = useTransform(scrollY, value => value * 0.3);
 
   const instructors = [
-    { name: 'Andi Wijaya', title: 'Lead Instructor', avatar: 'https://placehold.co/400x400/374151/FFFFFF?text=AW' },
+    { name: 'Sheren Aura Vi', title: 'Lead Instructor', avatar: 'lead.jpg' },
     { name: 'Siti Aminah', title: 'Workshop Assistant', avatar: 'https://placehold.co/400x400/374151/FFFFFF?text=SA' },
   ];
   
@@ -781,7 +782,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
         </header>
 
         <main className="container mx-auto px-6 pt-24">
-          <section className="relative text-center py-24 md:py-40">
+          <section className="relative text-center h-[100vh] flex flex-col items-center justify-center overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
               <motion.video 
                   style={{ y }}
@@ -790,7 +791,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
                   muted 
                   playsInline 
                   className="w-full h-full object-cover opacity-10" 
-                  src="https://cdn.pixabay.com/video/2023/11/26/189073-887309919_large.mp4"
+                  src="videoplayback.mp4"
               ></motion.video>
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-gray-900 via-gray-900/70 to-transparent"></div>
             </div>
@@ -822,7 +823,12 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
                 <div className="flex flex-col sm:flex-row gap-12 justify-center">
                   {instructors.map((instructor) => (
                     <motion.div key={instructor.name} className="text-center group" variants={fadeIn}>
-                      <img src={instructor.avatar} alt={instructor.name} className="w-40 h-40 rounded-full mx-auto mb-4 border-4 border-gray-700 group-hover:border-cyan-400 transition-colors duration-300" />
+                      <img 
+                          src={instructor.avatar} 
+                          alt={instructor.name} 
+                          className="w-40 h-40 rounded-full mx-auto mb-4 border-4 border-gray-700 group-hover:border-cyan-400 transition-colors duration-300 object-cover" 
+                      />
+
                       <h3 className="font-bold text-2xl">{instructor.name}</h3>
                       <p className="text-cyan-400 text-lg">{instructor.title}</p>
                     </motion.div>
@@ -861,8 +867,8 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
                 <h2 className="text-4xl font-bold mb-8 border-l-4 border-cyan-400 pl-4">Detail Acara</h2>
                 <div className="grid sm:grid-cols-2 gap-8 text-lg">
                    <div className="bg-gray-800/50 p-8 rounded-xl flex items-center space-x-6"><Calendar className="h-12 w-12 text-cyan-400"/><div><h3 className="font-bold text-xl">Tanggal</h3><p className="text-gray-300">Sabtu, 27 September 2025</p></div></div>
-                  <div className="bg-gray-800/50 p-8 rounded-xl flex items-center space-x-6"><Clock className="h-12 w-12 text-cyan-400"/><div><h3 className="font-bold text-xl">Waktu</h3><p className="text-gray-300">09:00 - 15:00 WIB</p></div></div>
-                   <div className="bg-gray-800/50 p-8 rounded-xl flex items-center space-x-6 col-span-full"><MapPin className="h-12 w-12 text-cyan-400"/><div><h3 className="font-bold text-xl">Lokasi</h3><p className="text-gray-300">Auditorium, Kampus Binus@Malang (Onsite)</p></div></div>
+                  <div className="bg-gray-800/50 p-8 rounded-xl flex items-center space-x-6"><Clock className="h-12 w-12 text-cyan-400"/><div><h3 className="font-bold text-xl">Waktu</h3><p className="text-gray-300">08:00 - 11:00 WIB</p></div></div>
+                   <div className="bg-gray-800/50 p-8 rounded-xl flex items-center space-x-6 col-span-full"><MapPin className="h-12 w-12 text-cyan-400"/><div><h3 className="font-bold text-xl">Lokasi</h3><p className="text-gray-300">Kampus Binus@Malang (Onsite)</p></div></div>
                 </div>
               </motion.section>
 
@@ -999,38 +1005,58 @@ const ConfirmationPage = ({ registeredName, onGoBack }: { registeredName: string
 };
 
 function App() {
-  const [isRegistered, setIsRegistered] = useState(false);
-  const [registeredName, setRegisteredName] = useState('');
+    const [isRegistered, setIsRegistered] = useState(false);
+    const [registeredName, setRegisteredName] = useState('');
 
-  useEffect(() => {
-    document.title = "GitReady with LnT - BNCC";
-  }, []);
+    useEffect(() => {
+        document.title = "GitReady with LnT - BNCC";
+    }, []);
 
-  const handleRegistration = (name: string) => {
-    setRegisteredName(name);
-    setIsRegistered(true);
-    window.scrollTo(0, 0);
-  };
+    const handleRegistration = (name: string) => {
+        setRegisteredName(name);
+        setIsRegistered(true);
+        window.scrollTo(0, 0);
+    };
 
-  const handleGoBack = () => {
-    setIsRegistered(false);
-    setRegisteredName('');
-    window.scrollTo(0, 0);
-  };
+    const handleGoBack = () => {
+        setIsRegistered(false);
+        setRegisteredName('');
+        window.scrollTo(0, 0);
+    };
 
-  return (
-    <AnimatePresence mode="wait">
-      {isRegistered ? (
-        <motion.div key="confirmation">
-          <ConfirmationPage registeredName={registeredName} onGoBack={handleGoBack} />
-        </motion.div>
-      ) : (
-        <motion.div key="registration">
-          <RegistrationPage onRegister={handleRegistration} />
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
+    return (
+        <Router>
+            <AnimatePresence mode="wait">
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            isRegistered ? (
+                                <motion.div key="confirmation">
+                                    <ConfirmationPage
+                                        registeredName={registeredName}
+                                        onGoBack={handleGoBack}
+                                    />
+                                </motion.div>
+                            ) : (
+                                <motion.div key="registration">
+                                    <RegistrationPage onRegister={handleRegistration} />
+                                </motion.div>
+                            )
+                        }
+                    />
+                    <Route
+                        path="*"
+                        element={
+                            <motion.div key="notfound">
+                                <NotFoundPage onGoHome={() => window.location.href = "/"} />
+                            </motion.div>
+                        }
+                    />
+                </Routes>
+            </AnimatePresence>
+        </Router>
+    );
 }
 
 export default App;
