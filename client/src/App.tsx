@@ -1007,7 +1007,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
         </script>
       </Helmet>
       
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white font-sans overflow-x-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white font-sans">
         {/* Enhanced Header with better mobile navigation */}
         <motion.header 
           className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
