@@ -1017,7 +1017,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
           animate={{ y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <nav className="container mx-auto px-4 lg:px-6 py-3">
+          <nav className="container mx-auto px-4 lg:px-6 py-3 relative">
             <div className="flex justify-between items-center">
               {/* Logo Section - Enhanced for mobile */}
               <motion.div 
@@ -1114,22 +1114,22 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
             <AnimatePresence>
               {isNavOpen && (
                 <motion.div 
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="lg:hidden mt-4 pb-4 border-t border-gray-700/50"
+                  className="absolute top-full left-0 right-0 z-40 lg:hidden bg-gray-900/95 backdrop-blur-md shadow-lg"
                 >
-                  <div className="flex flex-col space-y-4 pt-4">
+                  <div className="flex flex-col space-y-1 p-4 border-t border-gray-700/50">
                     {navLinks.map((link, index) => (
                       <motion.a 
                         key={link.href} 
                         href={link.href} 
                         onClick={(e) => handleNavClick(e, link.href)} 
-                        className="text-gray-300 hover:text-cyan-400 transition-colors text-lg cursor-pointer py-2 px-4 rounded-lg hover:bg-gray-800/50"
+                        className="text-gray-300 hover:text-cyan-400 transition-colors text-lg cursor-pointer py-3 px-4 rounded-lg hover:bg-gray-800/50"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
+                        transition={{ delay: index * 0.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
                         {link.name}
@@ -1138,7 +1138,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
                     <motion.a 
                       href="#form-pendaftaran" 
                       onClick={(e) => handleNavClick(e, '#form-pendaftaran')} 
-                      className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-xl transition duration-300 text-center cursor-pointer shadow-lg shadow-cyan-400/30 mx-4 mt-2"
+                      className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-xl transition duration-300 text-center cursor-pointer shadow-lg shadow-cyan-400/30 mt-4"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
@@ -1153,11 +1153,11 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
           </nav>
         </motion.header>
 
-        <main className="px-4 lg:px-6 pt-24">
+       <main className="pt-24">
           {/* Enhanced Hero Section */}
-          <section className="relative text-center min-h-[calc(100vh-6rem)] flex flex-col items-center justify-center py-20">
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900 z-0"></div>
-            
+          <section className="relative text-center min-h-[calc(100vh-6rem)] flex flex-col items-center justify-center px-4 lg:px-6">
+           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-gray-900/95 via-gray-900/70 to-gray-900 z-0"></div>
+
             <motion.div 
               className="relative z-10 max-w-6xl mx-auto"
               initial="hidden" 
@@ -1186,14 +1186,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
               </motion.div>
             </motion.div>
 
-            {/* Scroll indicator */}
-            <motion.div
-              className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              <ChevronDown className="h-8 w-8 text-cyan-400/70" />
-            </motion.div>
+            
           </section>
 
           <div className="max-w-6xl mx-auto">
@@ -1802,3 +1795,4 @@ function App() {
 }
 
 export default App;
+
