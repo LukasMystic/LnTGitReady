@@ -24,10 +24,10 @@ interface IRegistration {
   binusianEmail: string;
   privateEmail: string;
   major: string;
-  phoneNumber: string;
+  phoneNumber:string;
 }
 
-type SortableKeys = keyof Omit<IRegistration, '_id' | 'privateEmail'>;
+type SortableKeys = keyof Omit<IRegistration, '_id'>;
 
 
 // --- Komponen Input ---
@@ -328,6 +328,7 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
                                     <th className="p-4"><button onClick={() => requestSort('fullName')} className="flex items-center">Nama Lengkap {getSortIcon('fullName')}</button></th>
                                     <th className="p-4"><button onClick={() => requestSort('nim')} className="flex items-center">NIM {getSortIcon('nim')}</button></th>
                                     <th className="p-4"><button onClick={() => requestSort('binusianEmail')} className="flex items-center">Email Binusian {getSortIcon('binusianEmail')}</button></th>
+                                    <th className="p-4"><button onClick={() => requestSort('privateEmail')} className="flex items-center">Email Pribadi {getSortIcon('privateEmail')}</button></th>
                                     <th className="p-4"><button onClick={() => requestSort('major')} className="flex items-center">Jurusan {getSortIcon('major')}</button></th>
                                     <th className="p-4"><button onClick={() => requestSort('phoneNumber')} className="flex items-center">No. Telepon {getSortIcon('phoneNumber')}</button></th>
                                     <th className="p-4">Actions</th>
@@ -339,6 +340,7 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
                                         <td className="p-4">{reg.fullName}</td>
                                         <td className="p-4">{reg.nim}</td>
                                         <td className="p-4">{reg.binusianEmail}</td>
+                                        <td className="p-4">{reg.privateEmail}</td>
                                         <td className="p-4">{reg.major}</td>
                                         <td className="p-4">{reg.phoneNumber}</td>
                                         <td className="p-4">
