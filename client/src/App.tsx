@@ -1155,7 +1155,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
 
         <main className="container mx-auto px-4 lg:px-6 pt-24">
           {/* Enhanced Hero Section */}
-          <section className="relative text-center min-h-[100vh] flex flex-col items-center justify-center py-20">
+          <section className="relative text-center min-h-[calc(100vh-6rem)] flex flex-col items-center justify-center py-20">
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900 z-0"></div>
             
             <motion.div 
@@ -1683,7 +1683,7 @@ const ConfirmationPage = ({ registeredName, onGoBack }: { registeredName: string
                 transition={{ delay: 0.5 }}
               >
                 <p><strong className="text-gray-400 w-20 inline-block">Acara</strong>: GitReady with LnT</p>
-                <p><strong className="text-gray-400 w-20 inline-block">Tanggal</strong>: Sabtu, 27 September 2025</p>
+                <p><strong className="text-gray-400 w-20 inline-block">Tanggal</strong>: Jumat, 26 September 2025</p>
                 <p><strong className="text-gray-400 w-20 inline-block">Lokasi</strong>: Kampus Binus@Malang</p>
               </motion.div>
               
