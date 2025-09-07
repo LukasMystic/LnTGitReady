@@ -1153,7 +1153,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
           </nav>
         </motion.header>
 
-        <main className="container mx-auto px-4 lg:px-6 pt-24">
+        <main className="px-4 lg:px-6 pt-24">
           {/* Enhanced Hero Section */}
           <section className="relative text-center min-h-[calc(100vh-6rem)] flex flex-col items-center justify-center py-20">
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900 z-0"></div>
