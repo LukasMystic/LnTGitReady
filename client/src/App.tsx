@@ -892,7 +892,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
     { name: 'Gregorio Keefe Jason S.', title: 'Workshop Assistant', avatar: 'asisten3.jpg' },
     { name: 'Raden Alexander Christianace D. W. P.', title: 'Workshop Assistant', avatar: 'asisten4.jpg' },
     { name: 'Nathasa Bintang Kayesa', title: 'Workshop Assistant', avatar: 'asisten5.jpg' },
-    { name: 'Nadiva Agista', title: 'Workshop Assistant', avatar: 'https://placehold.co/400x400/374151/FFFFFF?text=NA' },
+    { name: 'Nadiva Agista', title: 'Workshop Assistant', avatar: 'asisten6.jpg' },
   ];
   
   const faqs = [
