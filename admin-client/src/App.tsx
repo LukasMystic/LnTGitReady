@@ -185,10 +185,35 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
         }
     }, []);
 
+    // --- NEW --- Wrap toggleRegistrationStatus in useCallback
+    const toggleRegistrationStatus = useCallback(async () => {
+        setIsStatusLoading(true);
+        try {
+            const response = await axios.post(`${API_URL}/api/admin/settings/toggle`, {}, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            setIsRegistrationOpen(response.data.isRegistrationOpen);
+        } catch (_err) {
+            alert('Failed to update status.');
+        } finally {
+            setIsStatusLoading(false);
+        }
+    }, [token]);
+
+
     useEffect(() => {
         fetchRegistrations();
         fetchRegistrationStatus();
     }, [fetchRegistrations, fetchRegistrationStatus]);
+    
+    // --- NEW --- Automatically close registration if participant count reaches 30
+    useEffect(() => {
+        if (registrations.length >= 30 && isRegistrationOpen === true) {
+            console.log('Participant limit reached (30). Automatically closing registration.');
+            toggleRegistrationStatus();
+        }
+    }, [registrations, isRegistrationOpen, toggleRegistrationStatus]);
+
 
     const handleUpdate = (updatedReg: IRegistration) => {
         setRegistrations(registrations.map(reg => reg._id === updatedReg._id ? updatedReg : reg));
@@ -208,26 +233,12 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
         }
     };
 
-    const toggleRegistrationStatus = async () => {
-        setIsStatusLoading(true);
-        try {
-            const response = await axios.post(`${API_URL}/api/admin/settings/toggle`, {}, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            setIsRegistrationOpen(response.data.isRegistrationOpen);
-        } catch (_err) {
-            alert('Failed to update status.');
-        } finally {
-            setIsStatusLoading(false);
-        }
-    };
-
     const exportToCsv = () => {
-        const headers = ['FullName', 'NIM', 'BinusianEmail', 'PrivateEmail', 'Major', 'PhoneNumber'];
+        const headers = ['No', 'FullName', 'NIM', 'BinusianEmail', 'PrivateEmail', 'Major', 'PhoneNumber'];
         const csvRows = [
             headers.join(','),
-            ...sortedRegistrations.map(reg => 
-                [reg.fullName, reg.nim, reg.binusianEmail, reg.privateEmail, reg.major, reg.phoneNumber].map(field => `"${field}"`).join(',')
+            ...sortedRegistrations.map((reg, index) => 
+                [index + 1, reg.fullName, reg.nim, reg.binusianEmail, reg.privateEmail, reg.major, reg.phoneNumber].map(field => `"${field}"`).join(',')
             )
         ];
         
@@ -292,8 +303,8 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
                         {isRegistrationOpen !== null && (
                             <button
                                 onClick={toggleRegistrationStatus}
-                                disabled={isStatusLoading}
-                                className={`font-bold py-2 px-4 rounded-lg flex items-center gap-2 ${isRegistrationOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} disabled:opacity-50`}
+                                disabled={isStatusLoading || registrations.length >= 30}
+                                className={`font-bold py-2 px-4 rounded-lg flex items-center gap-2 ${isRegistrationOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} disabled:opacity-50 disabled:cursor-not-allowed`}
                             >
                                 {isRegistrationOpen ? <PowerOff size={20}/> : <Power size={20}/>}
                                 <span>{isRegistrationOpen ? 'Close Registration' : 'Open Registration'}</span>
@@ -325,6 +336,8 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
                         <table className="w-full text-left">
                             <thead className="bg-gray-700/50">
                                 <tr>
+                                    {/* --- NEW --- Added Numbering Header */}
+                                    <th className="p-4 w-16">No.</th>
                                     <th className="p-4"><button onClick={() => requestSort('fullName')} className="flex items-center">Nama Lengkap {getSortIcon('fullName')}</button></th>
                                     <th className="p-4"><button onClick={() => requestSort('nim')} className="flex items-center">NIM {getSortIcon('nim')}</button></th>
                                     <th className="p-4"><button onClick={() => requestSort('binusianEmail')} className="flex items-center">Email Binusian {getSortIcon('binusianEmail')}</button></th>
@@ -337,6 +350,8 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
                             <tbody>
                                 {sortedRegistrations.map((reg, index) => (
                                     <tr key={reg._id} className={`border-t border-gray-700 ${index % 2 === 0 ? 'bg-gray-800/50' : ''}`}>
+                                        {/* --- NEW --- Added Numbering Cell */}
+                                        <td className="p-4 text-center">{index + 1}</td>
                                         <td className="p-4">{reg.fullName}</td>
                                         <td className="p-4">{reg.nim}</td>
                                         <td className="p-4">{reg.binusianEmail}</td>
