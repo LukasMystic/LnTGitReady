@@ -185,7 +185,6 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
         }
     }, []);
 
-    // --- NEW --- Wrap toggleRegistrationStatus in useCallback
     const toggleRegistrationStatus = useCallback(async () => {
         setIsStatusLoading(true);
         try {
@@ -206,7 +205,6 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
         fetchRegistrationStatus();
     }, [fetchRegistrations, fetchRegistrationStatus]);
     
-    // --- NEW --- Automatically close registration if participant count reaches 30
     useEffect(() => {
         if (registrations.length >= 30 && isRegistrationOpen === true) {
             console.log('Participant limit reached (30). Automatically closing registration.');
@@ -298,7 +296,13 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
         <div className="min-h-screen bg-gray-900 text-white p-6 sm:p-8">
             <div className="container mx-auto">
                 <div className="flex flex-wrap justify-between items-center gap-4 mb-8">
-                    <h1 className="text-4xl font-bold">Admin Dashboard</h1>
+                    <div className="flex items-center gap-x-4 flex-wrap">
+                        <h1 className="text-4xl font-bold">Admin Dashboard</h1>
+                        {/* --- NEW --- Registration Counter */}
+                        <span className="bg-gray-700 text-cyan-300 text-lg font-semibold px-4 py-2 rounded-full">
+                            {registrations.length} / 30 Registered
+                        </span>
+                    </div>
                     <div className="flex items-center gap-4 flex-wrap">
                         {isRegistrationOpen !== null && (
                             <button
@@ -336,7 +340,6 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
                         <table className="w-full text-left">
                             <thead className="bg-gray-700/50">
                                 <tr>
-                                    {/* --- NEW --- Added Numbering Header */}
                                     <th className="p-4 w-16">No.</th>
                                     <th className="p-4"><button onClick={() => requestSort('fullName')} className="flex items-center">Nama Lengkap {getSortIcon('fullName')}</button></th>
                                     <th className="p-4"><button onClick={() => requestSort('nim')} className="flex items-center">NIM {getSortIcon('nim')}</button></th>
@@ -350,7 +353,6 @@ const AdminDashboard = ({ token, onLogout }: { token: string, onLogout: () => vo
                             <tbody>
                                 {sortedRegistrations.map((reg, index) => (
                                     <tr key={reg._id} className={`border-t border-gray-700 ${index % 2 === 0 ? 'bg-gray-800/50' : ''}`}>
-                                        {/* --- NEW --- Added Numbering Cell */}
                                         <td className="p-4 text-center">{index + 1}</td>
                                         <td className="p-4">{reg.fullName}</td>
                                         <td className="p-4">{reg.nim}</td>
