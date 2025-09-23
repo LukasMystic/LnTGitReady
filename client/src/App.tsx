@@ -893,6 +893,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
     { name: 'Raden Alexander Christianace D. W. P.', title: 'Workshop Assistant', avatar: 'asisten4.jpg' },
     { name: 'Nathasa Bintang Kayesa', title: 'Workshop Assistant', avatar: 'asisten5.jpg' },
     { name: 'Nadiva Agista', title: 'Workshop Assistant', avatar: 'asisten6.jpg' },
+    { name: 'Ivanna Putri Paramitha', title: 'Workshop Assistant', avatar: 'asisten7.jpg' },
   ];
   
   const faqs = [
@@ -1252,7 +1253,7 @@ const RegistrationPage = ({ onRegister }: { onRegister: (name: string) => void }
               {instructors.length > 1 && (
                 <>
                   <h3 className="text-2xl md:text-3xl font-bold text-center mb-12">Dibantu oleh Asisten Workshop</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
                     {instructors.slice(1).map((instructor) => (
                       <motion.div 
                         key={instructor.name || 'placeholder-assistant'} 
@@ -1795,4 +1796,3 @@ function App() {
 }
 
 export default App;
-
